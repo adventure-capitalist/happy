@@ -1,0 +1,21 @@
+{
+  "name": "node-api-postgres",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "curl": "^0.1.4",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "nodemon": "^2.0.2",
+    "pg": "^7.18.1"
+  }
+}
