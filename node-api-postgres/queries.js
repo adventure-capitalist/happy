@@ -25,11 +25,15 @@ const checkSites = (request, response) => {
       throw error;
     }
     // for all sites, for all queries return status
+    // axios.all is returning promise collecting all responses
+    // Promise.all is creating promise fulfilled when all "child" promises are fulfilled
     Promise.all(results.rows.map(
         ({name, urls}) => axios.all(
             urls.map(url => axios.get(url).then(response => [name, url, response.status])))
         )
     ).then(results => {
+      // when all queries to external servers are finished
+
       // build response like: {name: {url: status}}
       const flat = results.reduce((acc, list) => [...list]).reduce(
           (acc, [name, url, status]) => {
