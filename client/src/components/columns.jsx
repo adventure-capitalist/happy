@@ -1,54 +1,45 @@
 import React, { Component } from "react";
 import axios from "axios";
-let arrhappy = [];
-let arrsad = [];
-const api = "http://localhost:3001/sites";
 
 class Columns extends Component {
   state = {
-    data: [{ id: 0, name: "", urls: ["", ""] }],
     happy: [],
     sad: [],
     faking: []
   };
+  // Lifecycle functions
+
   componentDidMount() {
-    this.getDataFromDb();
-    this.parseData(this.state.data);
+    this.getDataFromDB();
   }
 
-  getDataFromDb = () => {
-    axios.get(api).then(result => {
-      console.log(result.data);
-      let variable = [];
-      variable = result.data;
-      this.setState({ data: variable });
+  // Functions for doing stuff
+
+  getDataFromDB = () => {
+    axios.get("/sites/check").then(result => {
+      this.updateStatus(result.data);
     });
   };
 
-  parseData = data => {
-    data.map(site => {
-      this.checkStatus(site);
-    });
-  };
-
-  checkStatus(site) {
-    site.urls.map(url =>
-      axios.get(url).then(response => {
-        console.log(response);
-        if (response.status !== 200) {
-          arrsad.push(site.name);
-          console.log(site);
-        } else {
-          arrhappy.push(site.name);
-          console.log(site);
-        }
+  updateStatus(status) {
+    const result = Object.keys(status)
+      .map(key => {
+        const statuses = new Set(Object.values(status[key]));
+        const state = statuses.has(200)
+          ? statuses.size === 1
+            ? "happy"
+            : "sad"
+          : "sad";
+        return [key, state];
       })
-    );
-    this.update();
-  }
-
-  update() {
-    this.setState({ happy: arrhappy });
+      .reduce(
+        (acc, [name, state]) => {
+          acc[state].push(name);
+          return acc;
+        },
+        { happy: [], sad: [], faking: [] }
+      );
+    this.setState(result);
   }
 
   render() {
@@ -83,6 +74,7 @@ class Columns extends Component {
               {this.state.sad.map(item => {
                 return <li>{item}</li>;
               })}
+              <li></li>
             </ul>
           </div>
           <div className="fakers">

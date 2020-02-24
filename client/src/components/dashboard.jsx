@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import Columns from "./columns";
 
 class Dashboard extends Component {
