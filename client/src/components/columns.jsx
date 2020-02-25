@@ -16,7 +16,7 @@ class Columns extends Component {
   // Functions for doing stuff
 
   getDataFromDB = () => {
-    axios.get("/sites/check").then(result => {
+    axios.get("http://localhost:3001/sites/check").then(result => {
       this.updateStatus(result.data);
     });
   };
