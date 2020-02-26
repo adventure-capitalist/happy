@@ -3,14 +3,18 @@ import axios from "axios";
 
 class Columns extends Component {
   state = {
+    date: Date.now(),
     happy: [],
     sad: [],
     faking: []
   };
   // Lifecycle functions
 
+  // I think this is a five minute interval 300000
   componentDidMount() {
     this.getDataFromDB();
+    var intervalID = setInterval(this.getDataFromDB, 300000);
+    console.log(intervalID);
   }
 
   // Functions for doing stuff
@@ -19,6 +23,9 @@ class Columns extends Component {
     axios.get("http://localhost:3001/sites/check").then(result => {
       this.updateStatus(result.data);
     });
+    var time = new Date();
+    time = time.toTimeString().substr(0, 5);
+    this.setState({ date: time });
   };
 
   updateStatus(status) {
@@ -45,6 +52,7 @@ class Columns extends Component {
   render() {
     return (
       <React.Fragment>
+        <h3>Last touched base at: {this.state.date}</h3>
         <div className="overview">
           <p className="green">
             <strong className="stat">{this.state.happy.length}</strong>
