@@ -47,6 +47,10 @@ class Columns extends Component {
         { happy: [], sad: [], faking: [] }
       );
     this.setState(result);
+    if (this.state.sad.length > 0) {
+      var messenger = require("../messenger");
+      messenger.sendMessage();
+    }
   }
 
   render() {
